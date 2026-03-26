@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Green Valley International School | Excellence in Education</title>
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fefef7;
+      color: #1e2a32;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #e9ecef;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2c7a4d;
+      border-radius: 10px;
+    }
+
+    /* Keyframe animations */
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-10px); }
+    }
+
+    @keyframes scaleIn {
+      0% { opacity: 0; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes slideInLeft {
+      0% { opacity: 0; transform: translateX(-40px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+
+    @keyframes slideInRight {
+      0% { opacity: 0; transform: translateX(40px); }
+      100% { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Rotating text styles - using JS for perfect timing */
+    .hero-tagline {
+      margin: 1.2rem 0 0.8rem;
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      min-height: 4rem;
+    }
+    .static-text {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #1e3a2f;
+    }
+    .rotating-word {
+      display: inline-block;
+      min-width: 280px;
+      text-align: left;
+      position: relative;
+      height: 3.2rem;
+    }
+    .rotating-word span {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      font-weight: 800;
+      font-size: 1.9rem;
+      background: linear-gradient(135deg, #2c7a4d, #4caf7a);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      white-space: nowrap;
+      letter-spacing: -0.3px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+      opacity: 0;
+      transform: translateY(10px) scale(0.96);
+    }
+    .rotating-word span.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .glass-header {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(44, 122, 77, 0.15);
+    }
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      flex-wrap: wrap;
+    }
+    .logo h1 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1e6b3b, #2c9b5e);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      letter-spacing: -0.3px;
+    }
+    .logo span {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #4b6a5c;
+      display: block;
+      letter-spacing: 1px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 600;
+      color: #1f3b2c;
+      transition: 0.3s;
+      position: relative;
+      font-size: 1rem;
+    }
+    .nav-links a:after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 0%;
+      height: 2.5px;
+      background: #2c7a4d;
+      border-radius: 4px;
+      transition: 0.3s ease;
+    }
+    .nav-links a:hover:after {
+      width: 100%;
+    }
+    .nav-links a:hover {
+      color: #2c7a4d;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(120deg, #eefaf3 0%, #e2f0e8 100%);
+      position: relative;
+      overflow: hidden;
+      padding: 5rem 0 5rem 0;
+    }
+    .hero-grid {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .hero-content {
+      flex: 1;
+      min-width: 280px;
+      animation: slideInLeft 0.8s ease-out forwards;
+    }
+    .hero-badge {
+      background: rgba(44, 122, 77, 0.12);
+      display: inline-block;
+      padding: 0.4rem 1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1b6b3e;
+      margin-bottom: 1.5rem;
+      backdrop-filter: blur(4px);
+    }
+    .hero-content h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      color: #1e3a2f;
+      margin-bottom: 0.5rem;
+    }
+    .hero-gradient-text {
+      background: linear-gradient(135deg, #2a7f4a, #53b87a);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .hero-content p {
+      font-size: 1.2rem;
+      color: #2c4a3b;
+      margin: 1rem 0 1.5rem;
+      line-height: 1.5;
+    }
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 1rem;
+    }
+    .btn-primary {
+      background: #2c7a4d;
+      border: none;
+      padding: 0.9rem 2rem;
+      border-radius: 50px;
+      font-weight: 700;
+      color: white;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(44, 122, 77, 0.25);
+      cursor: pointer;
+      display: inline-block;
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      background: #1f5f3a;
+      transform: translateY(-3px);
+      box-shadow: 0 15px 25px rgba(44, 122, 77, 0.3);
+    }
+    .btn-outline {
+      background: transparent;
+      border: 2px solid #2c7a4d;
+      padding: 0.85rem 2rem;
+      border-radius: 50px;
+      font-weight: 700;
+      color: #2c7a4d;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+    .btn-outline:hover {
+      background: #2c7a4d;
+      color: white;
+      transform: translateY(-3px);
+    }
+    .hero-image {
+      flex: 1;
+      text-align: center;
+      animation: float 4s infinite ease-in-out;
+    }
+    .hero-image i {
+      font-size: 16rem;
+      color: #e2f0e8;
+      text-shadow: 0 20px 30px rgba(0,0,0,0.05);
+    }
+
+    /* Stats Section */
+    .stats-section {
+      background: linear-gradient(135deg, #1f3b2c, #2c7a4d);
+      color: white;
+      padding: 4rem 0;
+      margin: 2rem 0;
+      border-radius: 60px;
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Gallery Section */
+    .gallery-section {
+      background: #ffffff;
+      padding: 4rem 0;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.8rem;
+      margin-top: 2rem;
+    }
+    .gallery-item {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s ease;
+      cursor: pointer;
+      aspect-ratio: 4 / 3;
+    }
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .gallery-item:hover img {
+      transform: scale(1.08);
+    }
+    .gallery-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      color: white;
+      padding: 1.2rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-weight: 600;
+      text-align: center;
+      pointer-events: none;
+    }
+    .gallery-item:hover .gallery-overlay {
+      opacity: 1;
+    }
+
+    /* Sections common */
+    section {
+      padding: 5rem 0;
+    }
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+      color: #1f3b2c;
+    }
+    .section-title:after {
+      content: '';
+      display: block;
+      width: 70px;
+      height: 4px;
+      background: #2c7a4d;
+      margin: 0.8rem auto 0;
+      border-radius: 4px;
+    }
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+    .card-modern {
+      background: white;
+      border-radius: 28px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      transition: all 0.4s;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(44, 122, 77, 0.1);
+    }
+    .card-modern:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 25px 45px rgba(44, 122, 77, 0.15);
+    }
+    .card-icon {
+      font-size: 3rem;
+      color: #2c7a4d;
+      margin-bottom: 1.2rem;
+    }
+    /* director section */
+    .director-section {
+      background: linear-gradient(115deg, #f1f8f4 0%, #ffffff 100%);
+      border-radius: 48px;
+      margin: 2rem 0;
+      padding: 3rem 2rem;
+    }
+    .director-flex {
+      display: flex;
+      gap: 3rem;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .director-avatar {
+      flex: 1;
+      text-align: center;
+      min-width: 220px;
+    }
+    .avatar-circle {
+      width: 200px;
+      height: 200px;
+      background: linear-gradient(145deg, #2c7a4d, #3ba362);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 25px 40px rgba(0, 0, 0, 0.1);
+      animation: float 3s infinite ease-in-out;
+    }
+    .avatar-circle i {
+      font-size: 6rem;
+      color: white;
+    }
+    .director-info h3 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #1b4d33;
+    }
+    .director-title {
+      color: #2c7a4d;
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin: 0.5rem 0 1rem;
+    }
+    .message-text {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      color: #2d4a3c;
+    }
+    /* features */
+    .feature-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      margin-top: 1rem;
+    }
+    .feature-item {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      background: white;
+      border-radius: 28px;
+      padding: 1.5rem;
+      transition: 0.3s;
+    }
+    .feature-item i {
+      font-size: 2.2rem;
+      color: #2c7a4d;
+    }
+    /* contact & map */
+    .contact-grid {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem;
+      box-shadow: 0 20px 35px rgba(0,0,0,0.05);
+    }
+    .contact-info {
+      flex: 1;
+    }
+    .contact-info p {
+      margin: 1rem 0;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .map-container {
+      flex: 1;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .map-container iframe {
+      width: 100%;
+      height: 100%;
+      min-height: 280px;
+      border: 0;
+    }
+    footer {
+      background: #0a2a1f;
+      color: #cdedd9;
+      padding: 2.5rem 0;
+      text-align: center;
+      border-top-left-radius: 40px;
+      border-top-right-radius: 40px;
+    }
+    .footer-credit {
+      margin-top: 1rem;
+      font-weight: 500;
+    }
+    @media (max-width: 850px) {
+      .navbar { flex-direction: column; gap: 1rem; }
+      .hero-content h1 { font-size: 2.3rem; }
+      .rotating-word { min-width: 220px; height: 2.5rem; }
+      .rotating-word span { font-size: 1.5rem; white-space: normal; }
+      .static-text { font-size: 1.3rem; }
+      .hero-image i { font-size: 10rem; }
+      .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+    }
+    @media (max-width: 480px) {
+      .rotating-word span { font-size: 1.2rem; }
+      .static-text { font-size: 1.1rem; }
+      .rotating-word { min-width: 180px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="glass-header">
+  <div class="container">
+    <div class="navbar">
+      <div class="logo">
+        <h1>🌿 GREEN VALLEY <br> INTERNATIONAL SCHOOL</h1>
+        <span>where minds blossom</span>
+      </div>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#academics">Academics</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#director">Director</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Hero Section -->
+  <section id="home" class="hero">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-content">
+          <div class="hero-badge"><i class="fas fa-leaf"></i> 25+ years of excellence</div>
+          <h1>Shaping Tomorrow’s <span class="hero-gradient-text">Leaders</span> Today</h1>
+          <!-- Rotating text with JavaScript for perfect timing -->
+          <div class="hero-tagline">
+            <span class="static-text">We nurture</span>
+            <div class="rotating-word" id="rotatingWordContainer">
+              <span id="word1">Excellence ✨</span>
+              <span id="word2">Innovation 🚀</span>
+              <span id="word3">Integrity 🌿</span>
+              <span id="word4">Leadership 🏆</span>
+              <span id="word5">Compassion ❤️</span>
+            </div>
+          </div>
+          <p>Welcome to Green Valley International School — where innovation meets tradition, and every child discovers their brilliance.</p>
+          <div class="btn-group">
+            <a href="#" class="btn-primary"><i class="fas fa-graduation-cap"></i> Enroll Now</a>
+            <a href="#about" class="btn-outline"><i class="fas fa-chevron-circle-down"></i> Explore More</a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <i class="fas fa-tree"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <div class="container">
+    <div class="stats-section reveal">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number" data-target="1500">0</div>
+          <div class="stat-label"><i class="fas fa-user-graduate"></i> Happy Students</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="125">0</div>
+          <div class="stat-label"><i class="fas fa-chalkboard-user"></i> Expert Faculty</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="25">0</div>
+          <div class="stat-label"><i class="fas fa-calendar-alt"></i> Years of Legacy</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number" data-target="45">0</div>
+          <div class="stat-label"><i class="fas fa-trophy"></i> Awards Won</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Section -->
+  <section id="about">
+    <div class="container">
+      <h2 class="section-title reveal">About Our School</h2>
+      <div class="cards-grid">
+        <div class="card-modern reveal">
+          <div class="card-icon"><i class="fas fa-globe-americas"></i></div>
+          <h3>Global Vision</h3>
+          <p>International curriculum, holistic growth & future-ready learning environment.</p>
+        </div>
+        <div class="card-modern reveal">
+          <div class="card-icon"><i class="fas fa-chalkboard-user"></i></div>
+          <h3>Expert Faculty</h3>
+          <p>Passionate mentors dedicated to nurturing curiosity and excellence.</p>
+        </div>
+        <div class="card-modern reveal">
+          <div class="card-icon"><i class="fas fa-hand-sparkles"></i></div>
+          <h3>Holistic Growth</h3>
+          <p>Sports, arts, and leadership programs integrated into daily learning.</p>
+        </div>
+      </div>
+      <div class="director-section reveal" style="margin-top: 3rem;">
+        <div class="director-flex">
+          <div class="director-avatar">
+            <div class="avatar-circle">
+              <i class="fas fa-user-graduate"></i>
+            </div>
+          </div>
+          <div class="director-info">
+             <img src="school.png">
+            <h3>Pandit Pradeep Prajapati</h3>
+            <div class="director-title">Founder Director & Visionary</div>
+            <p class="message-text">"Education is the bridge between dreams and reality. At Green Valley International School, we don't just teach curriculum — we shape character, ignite imagination, and prepare global citizens. Every child here is nurtured with care, wisdom, and modern pedagogies. Together, we grow."</p>
+            <div></i> 25+ years of educational leadership</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Academics Section -->
+  <section id="academics" style="background: #fafef7;">
+    <div class="container">
+      <h2 class="section-title reveal">Academics & Programs</h2>
+      <div class="cards-grid">
+        <div class="card-modern reveal">
+          <div class="card-icon"><i class="fas fa-laptop-code"></i></div>
+          <h3>Primary Years</h3>
+          <p>Interactive learning, foundational skills, and creative exploration (Grades 1-5).</p>
+        </div>
+        <div class="card-modern reveal">
+          <div class="card-icon"><i class="fas fa-flask"></i></div>
+          <h3>Middle School</h3>
+          <p>STEM, languages, and experiential learning to build analytical minds (Grades 6-8).</p>
+        </div>
+        <div class="card-modern reveal">
+          <div class="card-icon"><i class="fas fa-microchip"></i></div>
+          <h3>Senior Secondary</h3>
+          <p>Advanced curricula with career counseling, research projects, and global opportunities.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERY SECTION (School Photos) -->
+  <section id="gallery" class="gallery-section">
+    <div class="container">
+      <h2 class="section-title reveal">📸 Life at Green Valley</h2>
+      <div class="gallery-grid">
+        <div class="gallery-item reveal">
+          <img src="SCHOOL1.png">
+          <div class="gallery-overlay">Smart Classroom</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="SCHOOL2" alt="Sports day">
+          <div class="gallery-overlay">Sports Excellence</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="SCHOOL3">
+          <div class="gallery-overlay">Knowledge Hub</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="SCHOOL4">
+          <div class="gallery-overlay">Green Campus</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=600&h=450&fit=crop" alt="Science lab">
+          <div class="gallery-overlay">Advanced Labs</div>
+        </div>
+        <div class="gallery-item reveal">
+          <img src="">
+          <div class="gallery-overlay">Creative Arts</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Choose Us + Feature Highlights -->
+  <section>
+    <div class="container">
+      <h2 class="section-title reveal">Why Green Valley?</h2>
+      <div class="feature-list">
+        <div class="feature-item reveal"><i class="fas fa-brain"></i><div><strong>Smart Classes</strong><br>AI-enabled digital boards & interactive labs</div></div>
+        <div class="feature-item reveal"><i class="fas fa-futbol"></i><div><strong>World-Class Sports</strong><br>Indoor & outdoor academies, professional coaches</div></div>
+        <div class="feature-item reveal"><i class="fas fa-school"></i><div><strong>Eco-Campus</strong><br>Lush green environment, organic garden & solar power</div></div>
+        <div class="feature-item reveal"><i class="fas fa-hand-holding-heart"></i><div><strong>Mentorship Program</strong><br>Personalized attention & emotional well-being</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Director Spotlight -->
+  <section id="director" style="padding-top: 0;">
+    <div class="container">
+      <div class="director-flex reveal" style="background: #ffffff; border-radius: 2rem; padding: 2rem; box-shadow: 0 12px 30px rgba(0,0,0,0.03);">
+        <div class="director-avatar">
+          <div class="avatar-circle" style="background: linear-gradient(145deg, #1e5a38, #2f8a54); width: 140px; height: 140px;">
+            <i class="fas fa-chalkboard-user" style="font-size: 3.5rem;"></i>
+          </div>
+        </div>
+        <div class="director-info">
+          <h4 style="color:#2c7a4d;">Message from the Director's Desk</h4>
+          <h2 style="font-size: 1.9rem;">Pandit Pradeep Prajapati</h2>
+          <p style="margin-top: 1rem;">“Green Valley International School stands as a beacon of progressive education rooted in Indian values. My vision is to craft an institution where academic excellence meets compassion. Each student is empowered to think critically, lead ethically, and contribute meaningfully to society.”</p>
+          <div><i class="fas fa-calendar-alt"></i> Since 1998 | <i class="fas fa-award"></i> Educational Excellence Award 2023</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section with Map -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title reveal">Get In Touch</h2>
+      <div class="contact-grid reveal">
+        <div class="contact-info">
+          <h3><i class="fas fa-map-marker-alt" style="color:#2c7a4d;"></i> Green Valley Campus</h3>
+          <p>GLA College, Panki Road, Daltonganj, Palamu, Jharkhand - 822101</p>
+          <p><i class="fas fa-phone-alt"></i> +91 98765 43210, +91 651 2456789</p>
+          <p><i class="fas fa-envelope"></i> contact@greenvalley.edu.in</p>
+          <div style="margin-top: 1.5rem;">
+            <i class="fab fa-facebook-f" style="margin-right: 1rem; font-size: 1.6rem; color:#2c7a4d;"></i>
+            <i class="fab fa-instagram" style="margin-right: 1rem; font-size: 1.6rem; color:#2c7a4d;"></i>
+            <i class="fab fa-linkedin-in" style="font-size: 1.6rem; color:#2c7a4d;"></i>
+          </div>
+        </div>
+        <div class="map-container">
+          <iframe src="https://maps.google.com/maps?q=GLA%20College%2C%20Panki%20Road%2C%20Daltonganj%2C%20Palamu%2C%20Jharkhand&t=&z=15&ie=UTF8&iwloc=&output=embed" allowfullscreen loading="lazy"></iframe>
+        </div>
+      </div>
+      <div class="contact-info" style="margin-top: 2rem; text-align: center;">
+        <h3><i class="fas fa-clock"></i> Office Hours</h3>
+        <p>Monday - Friday: 8:30 AM – 4:30 PM<br>Saturday: 9:00 AM – 1:00 PM<br>Sunday: Closed</p>
+        <p><i class="fas fa-globe"></i> Admissions Open 2025-26 | Limited seats</p>
+        <a href="#" class="btn-primary" style="display: inline-block; margin-top: 1rem;"><i class="fas fa-paper-plane"></i> Request Info</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <p><i class="fas fa-leaf"></i> Green Valley International School — Where Potential Takes Flight</p>
+    <div class="footer-credit">
+      Designed and Developed by <strong>Rupesh Yadav</strong> | © 2025 All Rights Reserved
+    </div>
+    <p style="margin-top: 1rem; font-size: 0.85rem;">Director: Pandit Pradeep Prajapati | Inspiring Excellence Since 1998</p>
+  </div>
+</footer>
+
+<script>
+  // Intersection Observer for scroll animations
+  const revealElements = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealElements.forEach(el => observer.observe(el));
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const targetId = this.getAttribute('href');
+      if (targetId === "#" || targetId === "") return;
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+        e.preventDefault();
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // Counting animation for stats
+  const statNumbers = document.querySelectorAll('.stat-number');
+  let started = false;
+  function startCounters() {
+    statNumbers.forEach(el => {
+      const target = parseInt(el.getAttribute('data-target'));
+      let current = 0;
+      const increment = target / 70;
+      const updateCounter = () => {
+        current += increment;
+        if (current < target) {
+          el.innerText = Math.ceil(current);
+          requestAnimationFrame(updateCounter);
+        } else {
+          el.innerText = target;
+        }
+      };
+      updateCounter();
+    });
+  }
+  const statsSection = document.querySelector('.stats-section');
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !started) {
+        started = true;
+        startCounters();
+        statsObserver.unobserve(statsSection);
+      }
+    });
+  }, { threshold: 0.5 });
+  if (statsSection) statsObserver.observe(statsSection);
+
+  // Initial active check
+  window.addEventListener('load', () => {
+    revealElements.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < window.innerHeight - 100) {
+        el.classList.add('active');
+        observer.unobserve(el);
+      }
+    });
+  });
+
+  // ========== ROTATING TEXT WITH PERFECT TIMING ==========
+  const words = document.querySelectorAll('.rotating-word span');
+  let currentIndex = 0;
+  const totalWords = words.length;
+  
+  // Initially set first word as active
+  if (words.length) {
+    words[0].classList.add('active');
+  }
+  
+  // Cycle through words every 3 seconds
+  setInterval(() => {
+    // Remove active class from current word
+    words[currentIndex].classList.remove('active');
+    // Move to next word
+    currentIndex = (currentIndex + 1) % totalWords;
+    // Add active class to new word
+    words[currentIndex].classList.add('active');
+  }, 3000);
+</script>
+</body>
+</html>
